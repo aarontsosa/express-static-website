@@ -17,14 +17,41 @@ const db = {
 app.get('/books/:bookId', (req, res) => {
     let bookId = req.params.bookId;
     let bookInfo = db[bookId];
+    if (!bookInfo) {
+        bookInfo = {
+            "author": "",
+            "year": "",
+            "title": `Book ID ${bookId} not found`
+        }
+    }
     let respText = `
-    <h1>${db[bookId]}</h1>
-    <h2>${db[bookInfo.title]}</h2>
-    <h2>${db[bookInfo.author]}</h2>
-    <h2>${db[bookInfo.year]}</h2>
+    <h1>${bookInfo.title}</h1>
+    <h2>${bookInfo.author}</h2>
+    <h2>${bookInfo.year}</h2>
     `
     res.end(respText)
 })
+
+app.get('/books/:bookId/:key', (req, res) => {
+    let bookId = req.params.bookId;
+    let bookInfo = db[bookId];
+    let key = req.params.key
+    if (!bookInfo) {
+        let errorMsg = `Book ID ${bookId} not found`
+        bookInfo = {
+            "author": errorMsg,
+            "year": errorMsg,
+            "title": errorMsg
+        }
+    }
+    let respText = `
+    <h1>${bookInfo.title}</h1>
+    <h2>${bookInfo.author}</h2>
+    <h2>${bookInfo.year}</h2>
+    `
+    res.end(respText)
+})
+
 
 app.listen(3456, () => {
     console.log("listening on 3456! AY!")
